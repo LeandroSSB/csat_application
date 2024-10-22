@@ -1,13 +1,16 @@
 import { Router, Express } from 'express';
-import { createSurvey } from '../controllers/surveyController';
+import { createSurvey, listSurveysController, updateSurveyController, findSurveyController } from '@/controllers/surveyController';
 
 
 const surveyRoutes = (app : Express) =>  {
   const router = Router();
   router.post('/', createSurvey);
+  router.get('/', listSurveysController);
+  router.put('/:id', updateSurveyController);
+  router.get('/:id', findSurveyController);
 
 
-  app.use(router)
+  app.use("/survey", router)
 }
 
 
