@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { createSurvey as createSurveyService, updateSurvey as updateSurveyService, findSurvey as findSurveyService, listSurveys as listSurveysService } from '@/services/surveyServices';
+import { createSurvey as createSurveyService, updateSurvey as updateSurveyService, findSurvey as findSurveyService, listSurveys as listSurveysService, exportSurveyResponsesAsCSV } from '@/services/surveyServices';
 import logger from '@/utils/logger';
 
 
@@ -56,3 +56,17 @@ export const findSurveyController = async (req: Request, res: Response, next: Ne
     next(err)
   }
 }
+
+export const exportSurveyResponsesController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { targetAudience } = req.query;
+
+  try {
+    const csvData = await exportSurveyResponsesAsCSV(targetAudience as string);
+    res.header('Content-Type', 'text/csv');
+    res.attachment(`${targetAudience}-${new Date().toJSON()}.csv`);
+    res.send(csvData);
+  } catch (err) {
+    logger.error(`Error exporting survey responses: ${err}`);
+    next(err)
+  }
+};

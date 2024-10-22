@@ -12,3 +12,25 @@ export const saveSurveyResponse = async (surveyId: number, response: string, sta
     },
   });
 };
+
+export const findSurveyResponsesByTargetAudience = async (targetAudience: string, sortByStars: 'asc' | 'desc') => {
+  return await prisma.surveyResponse.findMany({
+    where: { 
+      survey: {
+        targetAudience: {
+          mode: 'insensitive'
+        }
+      }
+    },
+    include: {
+      survey: {
+        select: {
+          targetAudience: true,
+          contactEmail: true,
+          ratingStars: true
+        }
+      }
+    },
+    orderBy: { stars: sortByStars },
+  });
+};

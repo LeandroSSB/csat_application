@@ -1,4 +1,4 @@
 import { surveySchema, surveySchemaOpcional} from "./surveySchema"
-import surveyReponseSchema from "./surveyReponseSchema"
+import surveyResponseSchema from "./surveyReponseSchema"
 
-export { surveySchema, surveyReponseSchema, surveySchemaOpcional }
+export { surveySchema, surveyResponseSchema, surveySchemaOpcional }

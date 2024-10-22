@@ -2,6 +2,8 @@ import { createSurvey as createSurveyRepo, findSurveyById, updateSurvey as updat
 import { ErrorHandler } from '@/utils/error';
 import logger from '@/utils/logger';
 import { ISurveyProps, UpdateSurveyData } from "@/interfaces"
+import { findSurveyResponsesByTargetAudience } from '../repositories/surveyResponseRepository';
+import { Parser } from 'json2csv';
 
 export const createSurvey = async ( { targetAudience, contactEmail, ratingStars } : ISurveyProps ) => {
   logger.info(`Creating survey for: targetAudience=${targetAudience}, email=${contactEmail}`);
@@ -53,3 +55,16 @@ export const listSurveys = async () => {
   logger.warn("Listing Surverys");
   return await listSurveysRepo()
 }
+
+export const exportSurveyResponsesAsCSV = async (targetAudience: string): Promise<string> => {
+  const responses = await findSurveyResponsesByTargetAudience(targetAudience, 'asc');
+  
+  const flatResponses = responses.map(( item ) =>  {
+    const { survey, ...rest } = item 
+    return { ...survey, ...rest }
+  } )
+
+  const csvFields = ['surveyId', 'response', 'stars',  'createdAt', 'targetAudience', 'contactEmail', 'ratingStars'];
+  const json2csvParser = new Parser({ fields: csvFields });
+  return json2csvParser.parse(flatResponses);
+};

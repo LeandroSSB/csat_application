@@ -8,10 +8,12 @@ import type {
 import { handleError } from "@/utils/error";
 
 import surveyRoutes from "./surveyRoutes"
+import surveyResponseRoutes from "./surveyResponseRoutes"
 
 const router = (app: Express) => {
 
   surveyRoutes(app)
+  surveyResponseRoutes(app)
 
   app.use(
     (

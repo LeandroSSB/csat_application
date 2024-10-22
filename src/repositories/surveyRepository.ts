@@ -34,6 +34,9 @@ export const findSurveyById = async (id: number): Promise<Survey | null> => {
   logger.info(`Find survey in the database: id=${id}`);
   return await prisma.survey.findUnique({
     where: { id },
+    include: {
+      responses: true
+    }
   });
 };
 
