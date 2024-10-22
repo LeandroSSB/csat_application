@@ -5,6 +5,7 @@ export interface ISurveyProps {
 }
 
 export interface ISurveyResponseProps {
+  surveyId: number
   response: string
   stars: number
 }
