@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { createSurvey as createSurveyService, updateSurvey as updateSurveyService, findSurvey as findSurveyService, listSurveys as listSurveysService } from '@/services/surveyServices';
-import {  handleError } from '@/utils/error';
 import logger from '@/utils/logger';
 
 
-export const createSurvey = async (req: Request, res: Response): Promise<void> => {
+export const createSurvey = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { targetAudience, ratingStars, contactEmail } = req.body;
 
   if (!targetAudience || !ratingStars || !contactEmail) {
@@ -20,12 +19,12 @@ export const createSurvey = async (req: Request, res: Response): Promise<void> =
 
   } catch (err) {
     logger.error(`Error creating survey: ${err}`);
-    handleError(err, res)
+    next(err)
   }
 };
 
 
-export const updateSurveyController = async (req: Request, res: Response): Promise<void> => {
+export const updateSurveyController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
   const { targetAudience, contactEmail, ratingStars } = req.body;
 
@@ -35,23 +34,23 @@ export const updateSurveyController = async (req: Request, res: Response): Promi
     res.status(200).json(updatedSurvey);
   } catch (err) {
     logger.error(`Error updating survey: ${err}`);
-    handleError(err, res)
+    next(err)
   }
 };
 
 
-export const listSurveysController = async (_req: Request, res: Response): Promise<void> => {
+export const listSurveysController = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const surveys = await listSurveysService()
     res.status(200).json(surveys)
   }catch(err) {
     logger.error(`Error list survey: ${err}`);
-    handleError(err, res)
+    next(err)
   }
 }
 
 
-export const findSurveyController = async (req: Request, res: Response): Promise<void> => {
+export const findSurveyController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
     const survey = await findSurveyService(Number(id));
@@ -60,6 +59,6 @@ export const findSurveyController = async (req: Request, res: Response): Promise
 
   } catch (err) {
     logger.error(`Error find survey: ${err}`);
-    handleError(err, res)
+    next(err)
   }
 }
