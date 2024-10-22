@@ -1,0 +1,124 @@
+{
+	"info": {
+		"_postman_id": "fe782ad9-0743-4372-af03-efa8f3d49c6a",
+		"name": "csat_application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21709628"
+	},
+	"item": [
+		{
+			"name": "Create Survey",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"targetAudience\": \"Geeks\",\r\n  \"ratingStars\": 5,\r\n  \"contactEmail\": \"geek@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/survey",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"survey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Surveys",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/survey",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"survey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FIND Survey",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/survey/1",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"survey",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Survey",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"targetAudience\": \"Minimalistas\",\r\n  \"ratingStars\": 4,\r\n  \"contactEmail\": \"minimal@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/survey/1",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"survey",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local",
+			"value": "http://localhost:3000"
+		}
+	]
+}
