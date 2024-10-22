@@ -2,11 +2,29 @@
 
 API de Pesquisa de Satisfação do Cliente desenvolvida em TypeScript seguindo os princípios da Clean Architecture. Esta API permite criar, atualizar, listar e buscar pesquisas de satisfação para diferentes públicos-alvo.
 
+## Tecnologias Utilizadas
+- Node.js
+- TypeScript
+- Express
+- Prisma ORM
+- PostgreSQL
+- Docker
+- Winston (Logging)
+- Jest (Testes)
+
 ## Requisitos
 
-- Node.js (v14+)
-- PostgreSQL
-- Docker (opcional para setup com Docker Compose)
+- [Docker](https://www.docker.com/get-started) instalado
+- [Node.js](https://nodejs.org/) versão 16 ou superior
+- [Postman](https://www.postman.com/) para testar os endpoints
+
+## Variáveis de Ambiente
+  As variáveis de ambiente são configuradas no arquivo .env. Exemplo:
+  ```env
+    DATABASE_URL="postgresql://user:password@localhost:5432/mydatabase"
+    NODE_ENV=development
+  ```
+
 
 ## Instalação
 
@@ -27,9 +45,12 @@ API de Pesquisa de Satisfação do Cliente desenvolvida em TypeScript seguindo o
   ```bash
   npx prisma migrate dev --name init
   ```
-### 5. Rode a aplicação:
+### 5. Rode a aplicação no bash ou docker:
   ```bash
   npm run dev
+  ```
+  ```bash
+  docker-compose up --build
   ```
 ### 6. A aplicação estará disponível em http://localhost:3000 ou na porta espeficiada no env PORT
 
