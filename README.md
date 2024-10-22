@@ -35,55 +35,38 @@ API de Pesquisa de Satisfação do Cliente desenvolvida em TypeScript seguindo o
 
 ## Endpoints
 
-  ### Postman
-    A aplicação possui um arquivo .json para importar no Postman
+### Postman
+  A aplicação possui um arquivo .json para importar no Postman
 
-  ### 1. Criar uma pesquisa de satisfação
-    - POST <b> /survey </b>
-    - Body(json):
-      ```json
-        {
-          "targetAudience": "Geeks",
-          "ratingStars": 5,
-          "contactEmail": "geek@example.com"
-        }
-      ```
-
-  ### 2. Atualizar uma pesquisa de satisfação
-    - PUT <b> /survey/:id </b>
-    - Body (json)
-      ```json
+### 1. Criar uma pesquisa de satisfação
+  - POST <b> /survey </b>
+  - Body(json):
+    ```json
       {
-        "targetAudience": "Minimalistas",
-        "ratingStars": 4,
-        "contactEmail": "minimal@example.com"
+        "targetAudience": "Geeks",
+        "ratingStars": 5,
+        "contactEmail": "geek@example.com"
       }
-      ```
+    ```
 
-  ### 3. Listar todas as pesquisas
-    - GET <b> /survey </b>
-    - Response:
-      - Status 200
-      - Exemplo:
-        ```json
-          [
-            {
-              "id": 1,
-              "targetAudience": "Geeks",
-              "contactEmail": "geek@example.com",
-              "ratingStars": 5,
-              "createdAt": "2024-10-22T12:00:00Z",
-              "updatedAt": null
-            }
-          ]
-        ```
+### 2. Atualizar uma pesquisa de satisfação
+  - PUT <b> /survey/:id </b>
+  - Body (json)
+    ```json
+    {
+      "targetAudience": "Minimalistas",
+      "ratingStars": 4,
+      "contactEmail": "minimal@example.com"
+    }
+    ```
 
-  ### 4. Buscar uma pesquisa pelo ID
-    - GET <b> /survey/:id </b>
-    - Response:
-      - Status 200
-      - Exemplo:
-        ```json
+### 3. Listar todas as pesquisas
+  - GET <b> /survey </b>
+  - Response:
+    - Status 200
+    - Exemplo:
+      ```json
+        [
           {
             "id": 1,
             "targetAudience": "Geeks",
@@ -92,7 +75,24 @@ API de Pesquisa de Satisfação do Cliente desenvolvida em TypeScript seguindo o
             "createdAt": "2024-10-22T12:00:00Z",
             "updatedAt": null
           }
-        ```
+        ]
+      ```
+
+### 4. Buscar uma pesquisa pelo ID
+  - GET <b> /survey/:id </b>
+  - Response:
+    - Status 200
+    - Exemplo:
+      ```json
+        {
+          "id": 1,
+          "targetAudience": "Geeks",
+          "contactEmail": "geek@example.com",
+          "ratingStars": 5,
+          "createdAt": "2024-10-22T12:00:00Z",
+          "updatedAt": null
+        }
+      ```
 
 
 ## Logs
