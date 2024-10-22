@@ -14,21 +14,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model Survey {
-  id            Int             @id @default(autoincrement())
-  targetAudience String
-  contactEmail  String
-  ratingStars   Int
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime?        @updatedAt
-  responses     SurveyResponse[]
+  id             Int            @id @default(autoincrement())
+  targetAudience String         // Público-alvo
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  questions      Question[]     // Relacionamento com perguntas
+  responses      SurveyResponse[] // Relacionamento com respostas
+
+  @@map("surveys")
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  content   String   // Pergunta (Ex.: Público-alvo, Quantidade de estrelas, E-mail para contato)
+  surveyId  Int
+  survey    Survey   @relation(fields: [surveyId], references: [id])
+  answers   SurveyAnswer[]  // Relacionamento com respostas
+
+  @@map("questions")
 }
 
 model SurveyResponse {
-  id        Int      @id @default(autoincrement())
-  surveyId  Int
-  survey    Survey   @relation(fields: [surveyId], references: [id])
-  response  String
-  stars     Int
-  createdAt DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  surveyId       Int
+  ratingStars    Int      // Quantidade de estrelas obrigatória
+  createdAt      DateTime @default(now())
+  survey         Survey   @relation(fields: [surveyId], references: [id])
+  answers        SurveyAnswer[]  // Relacionamento com respostas
+
+  @@map("survey_responses")
+}
+
+model SurveyAnswer {
+  id             Int      @id @default(autoincrement())
+  responseId     Int
+  questionId     Int
+  answer         String   // Resposta à pergunta específica
+  response       SurveyResponse @relation(fields: [responseId], references: [id])
+  question       Question   @relation(fields: [questionId], references: [id])
+
+  @@map("survey_answers")
 }

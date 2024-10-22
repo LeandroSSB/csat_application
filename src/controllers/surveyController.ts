@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { createSurvey as createSurveyService, updateSurvey as updateSurveyService, findSurvey as findSurveyService, listSurveys as listSurveysService, exportSurveyResponsesAsCSV } from '@/services/surveyServices';
 import logger from '@/utils/logger';
+import {  UpdateSurveyData } from '@/interfaces';
 
 
 export const createSurvey = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { targetAudience, ratingStars, contactEmail } = req.body;
+  const { targetAudience, questions } = req.body;
 
   try {
-    const survey = await createSurveyService({ targetAudience, contactEmail, ratingStars });
+    const survey = await createSurveyService({ targetAudience, questions });
     logger.info(`Survey created successfully: ${JSON.stringify(survey)}`);
     res.status(201).json(survey);
 
@@ -20,10 +21,10 @@ export const createSurvey = async (req: Request, res: Response, next: NextFuncti
 
 export const updateSurveyController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
-  const { targetAudience, contactEmail, ratingStars } = req.body;
+  const { targetAudience, questions  }: UpdateSurveyData = req.body;
 
   try {
-    const updatedSurvey = await updateSurveyService(Number(id), { targetAudience, contactEmail, ratingStars });
+    const updatedSurvey = await updateSurveyService(Number(id), { targetAudience, questions });
     logger.info(`Survey updated successfully: ${JSON.stringify(updatedSurvey)}`);
     res.status(200).json(updatedSurvey);
   } catch (err) {

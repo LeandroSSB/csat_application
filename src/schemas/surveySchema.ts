@@ -1,14 +1,12 @@
 import * as yup from "yup";
 
 export const surveySchema = yup.object().shape({
-  targetAudience: yup.string().required("targetAudience is a required field"),
-  ratingStars: yup.number().required("ratingStars is a required field"),
-  contactEmail: yup.string().email("Must be an email").required("email is a required field")
+  targetAudience: yup.string().required(),
+  questions: yup.array(yup.string()).nullable()
 });
 
 export const surveySchemaOpcional = yup.object().shape({
   targetAudience: yup.string().nullable(),
-  ratingStars: yup.number().nullable(),
-  contactEmail: yup.string().email("Must be an email").nullable()
+  questions: yup.array(yup.string()).nullable()
 });
 

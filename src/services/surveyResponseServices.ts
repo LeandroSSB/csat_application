@@ -3,27 +3,20 @@ import { findSurveyResponsesByTargetAudience } from '@/repositories/surveyRespon
 import { saveSurveyResponse } from '@/repositories/surveyResponseRepository';
 import { ISurveyResponseProps } from "@/interfaces"
 import logger from '@/utils/logger';
+import { ErrorHandler } from '@/utils/error';
 
-export const fillSurvey = async ( answers: ISurveyResponseProps) => {
-  const { response, stars, surveyId } = answers
+export const fillSurvey = async ( { answers, ratingStars, surveyId } :ISurveyResponseProps ) => {
 
   logger.info(`Filling survey with ID: ${surveyId}`);
 
   const survey = await findSurveyById(surveyId);
   if (!survey) {
     logger.warn(`Survey not found: id=${surveyId}`);
-    throw new Error('Survey not found');
-  }
-
-
-  // Verifique se todas as perguntas obrigatórias estão presentes
-  if (!response || !stars || !surveyId) {
-    logger.warn('Missing required fields in survey response');
-    throw new Error('Missing required fields');
+    throw new ErrorHandler(404, 'Survey not found');
   }
 
   try {
-    const surveyResponse = await saveSurveyResponse( surveyId,  response, stars );
+    const surveyResponse = await saveSurveyResponse( surveyId, ratingStars, answers );
     logger.info(`Survey response saved: ${JSON.stringify(surveyResponse)}`);
     return surveyResponse;
   } catch (err) {

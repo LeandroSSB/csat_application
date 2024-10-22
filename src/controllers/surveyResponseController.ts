@@ -4,10 +4,17 @@ import logger from '../utils/logger';
 
 export const fillSurveyController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
-  const answers = req.body;
+  const {  ratingStars, contactEmail, answers } = req.body;;
 
   try {
-    const surveyResponse = await fillSurvey({surveyId: Number(id), ...answers});
+    const surveyResponse = await fillSurvey(
+      {
+      surveyId: Number(id),
+      answers, 
+      ratingStars,
+      contactEmail
+    }
+    );
     logger.info(`Survey response recorded for survey ID: ${id}`);
     res.status(201).json(surveyResponse);
   } catch (err) {
