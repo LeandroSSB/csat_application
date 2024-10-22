@@ -55,7 +55,7 @@ export const findSurveyController = async (req: Request, res: Response): Promise
   try {
     const { id } = req.params;
     const survey = await findSurveyService(Number(id));
-    logger.error(`Survey find successfully`);
+    logger.info(`Survey find successfully`);
     res.status(200).json(survey);
 
   } catch (err) {
