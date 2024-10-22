@@ -1,8 +1,9 @@
 import { createSurvey as createSurveyRepo, findSurveyById, updateSurvey as updateSurveyRepo, listSurveys as listSurveysRepo } from '@/repositories/surveyRepository';
 import { ErrorHandler } from '@/utils/error';
 import logger from '@/utils/logger';
+import { ISurveyProps, UpdateSurveyData } from "@/interfaces"
 
-export const createSurvey = async (targetAudience: string, contactEmail: string, ratingStars: number) => {
+export const createSurvey = async ( { targetAudience, contactEmail, ratingStars } : ISurveyProps ) => {
   logger.info(`Creating survey for: targetAudience=${targetAudience}, email=${contactEmail}`);
 
   try {
@@ -14,7 +15,7 @@ export const createSurvey = async (targetAudience: string, contactEmail: string,
 };
 
 
-export const updateSurvey = async (id: number, targetAudience?: string, contactEmail?: string, ratingStars?: number) => {
+export const updateSurvey = async (id: number, updateData: UpdateSurveyData) => {
   logger.info(`Updating survey: id=${id}`);
 
   const existingSurvey = await findSurveyById(id);
@@ -23,6 +24,8 @@ export const updateSurvey = async (id: number, targetAudience?: string, contactE
     logger.warn(`Survey not found in updateSurvey service: id=${id}`);
     throw new ErrorHandler(404, 'Survey not found');
   }
+  
+  const { targetAudience, contactEmail, ratingStars } = updateData
 
   try{
     const updatedSurvey = await updateSurveyRepo(id, { targetAudience, contactEmail, ratingStars });

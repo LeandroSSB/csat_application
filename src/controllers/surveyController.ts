@@ -6,14 +6,8 @@ import logger from '@/utils/logger';
 export const createSurvey = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { targetAudience, ratingStars, contactEmail } = req.body;
 
-  if (!targetAudience || !ratingStars || !contactEmail) {
-    logger.warn("Missing required fields in createSurvey");
-    res.status(400).send('Missing required fields');
-    return;
-  }
-
   try {
-    const survey = await createSurveyService(targetAudience, contactEmail, ratingStars);
+    const survey = await createSurveyService({ targetAudience, contactEmail, ratingStars });
     logger.info(`Survey created successfully: ${JSON.stringify(survey)}`);
     res.status(201).json(survey);
 
@@ -29,7 +23,7 @@ export const updateSurveyController = async (req: Request, res: Response, next: 
   const { targetAudience, contactEmail, ratingStars } = req.body;
 
   try {
-    const updatedSurvey = await updateSurveyService(Number(id), targetAudience, contactEmail, ratingStars);
+    const updatedSurvey = await updateSurveyService(Number(id), { targetAudience, contactEmail, ratingStars });
     logger.info(`Survey updated successfully: ${JSON.stringify(updatedSurvey)}`);
     res.status(200).json(updatedSurvey);
   } catch (err) {
