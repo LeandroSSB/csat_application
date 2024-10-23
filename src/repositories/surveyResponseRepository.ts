@@ -16,7 +16,8 @@ export const saveSurveyResponse = async ( surveyId: number,  ratingStars: number
       }
     },
     include: {
-      survey: true
+      survey: true,
+      answers: true
     }
   });
 };
