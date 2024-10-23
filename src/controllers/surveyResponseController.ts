@@ -5,7 +5,7 @@ import { generateCsvFromSurveyResponses } from '@/utils/csvResponse';
 
 export const fillSurveyController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
-  const {  ratingStars, contactEmail, answers } = req.body;;
+  const {  ratingStars, answers } = req.body;;
 
   try {
     const surveyResponse = await fillSurvey(
@@ -13,7 +13,6 @@ export const fillSurveyController = async (req: Request, res: Response, next: Ne
       surveyId: Number(id),
       answers, 
       ratingStars,
-      contactEmail
     }
     );
     logger.info(`Survey response recorded for survey ID: ${id}`);

@@ -12,7 +12,6 @@ export interface ISurveyAnswer {
 
 export interface ISurveyResponseProps {
   ratingStars: number
-  contactEmail: string
   answers: ISurveyAnswer[]
   surveyId: number
 }
