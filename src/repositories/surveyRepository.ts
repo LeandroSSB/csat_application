@@ -1,9 +1,10 @@
 import prisma from '@/services/prismaClient';
 import { Prisma, Survey } from '@prisma/client';
 import logger from '@/utils/logger';
+import { SurveyWithQuestionsAnswers, SurveyWithQuestions } from '@/interfaces';
 
 
-export const createSurvey = async (targetAudience: string, allQuestions: string[]): Promise<Survey> => {
+export const createSurvey = async (targetAudience: string, allQuestions: string[]): Promise<SurveyWithQuestions> => {
   logger.info(`Creating survey for target audience: ${targetAudience}`);
 
   const survey =  await prisma.survey.create({
@@ -51,9 +52,7 @@ export const updateSurvey = async (id: number, data: Partial<Survey>, questions:
   });
 };
 
-type SurveyWithQuestionsAnswers = Prisma.SurveyGetPayload<{
-  include: { questions: { include: { answers: true } } }
-}>
+
 
 export const findSurveyById = async (id: number): Promise<SurveyWithQuestionsAnswers | null> => {
   logger.info(`Find survey in the database: id=${id}`);

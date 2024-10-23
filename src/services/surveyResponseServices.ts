@@ -16,11 +16,20 @@ export const fillSurvey = async ( { answers, ratingStars, surveyId } :ISurveyRes
   }
 
   const answeredEveryQuestion = survey.questions.every(question => answers.find( answer => answer.questionId == question.id ))
+  const hasInvalidQuestions = !answers.every(answer => survey.questions.find(question => question.id == answer.questionId))
+  
+  if (hasInvalidQuestions){
+    const invalidQuestions = answers.filter(answer => !survey.questions.find(question => question.id == answer.questionId)).map(({ questionId, answer }) => `${questionId} with answer: ${answer}` )
+
+    logger.warn(`Survey with invalid question's id: survey id=${surveyId}`);
+    throw new ErrorHandler(400, `Survey with invalid question's id: ${invalidQuestions.join(", ")} `);
+  }
+
   if ( ! answeredEveryQuestion ) {
     const questionsLeft = survey.questions.filter(question => !answers.find(answer => answer.questionId == question.id) ).map(question => question.content)
 
     logger.warn(`Survey not completely responded: id=${surveyId}`);
-    throw new ErrorHandler(404, `Survey not completely responded. Questions left: ${questionsLeft.join(", ")}`);
+    throw new ErrorHandler(400, `Survey not completely responded. Questions left: ${questionsLeft.join(",")}`);
   }
 
   try {
@@ -34,5 +43,11 @@ export const fillSurvey = async ( { answers, ratingStars, surveyId } :ISurveyRes
 };
 
 export const listSurveyResponsesByAudience = async (targetAudience: string, sortByStars: 'asc' | 'desc') => {
-  return await findSurveyResponsesByTargetAudience(targetAudience, sortByStars);
+  const responses = await findSurveyResponsesByTargetAudience(targetAudience, sortByStars);
+  
+  if(!responses.length) {
+    throw new ErrorHandler(404, "Target audience without responses")
+  }
+
+  return responses
 };

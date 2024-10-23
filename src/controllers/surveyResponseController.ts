@@ -28,14 +28,14 @@ export const listSurveyResponsesController = async (req: Request, res: Response,
   const { targetAudience } = req.query;
   const sortByStars = req.query.sortByStars === 'desc' ? 'desc' : 'asc';
   const format = req.query.format || 'json';
-  console.log(targetAudience, sortByStars, format )
+
   try {
     const responses = await listSurveyResponsesByAudience(targetAudience as string, sortByStars);
     
     if (format === 'csv') {
-      const csv = generateCsvFromSurveyResponses(responses);
+      const csv = generateCsvFromSurveyResponses(responses as Array<object>);
       res.header('Content-Type', 'text/csv');
-      res.attachment('survey-responses.csv');
+      res.attachment(`survey-responses-${targetAudience}-${new Date().toJSON()}.csv`);
       return res.send(csv);
     } else {
       return res.json(responses);
