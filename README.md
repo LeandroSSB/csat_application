@@ -151,7 +151,7 @@ Este endpoint permite responde uma pesquisa por id
     }
   ```    
 
-#### Response
+#### Resposta
 
 Retorna o objeto da resposta
 
@@ -182,7 +182,7 @@ Este endpoint lista as respostas da pesquisa filtradas por público-alvo, com fi
   ```
     GET /response/list?targetAudience=Geeks&sortByStars=asc&format=csv
   ```
-#### Response
+#### Resposta
 
   ```json
     [
@@ -209,7 +209,7 @@ Este endpoint lista as pesquisas.
   ```
     GET /survey
   ```
-#### Response
+#### Resposta
 
   ```json
     [
@@ -247,7 +247,7 @@ Este endpoint encontra uma pesquisa por ID.
   ```
     GET /survey
   ```
-#### Response
+#### Resposta
 
   ```json
     
