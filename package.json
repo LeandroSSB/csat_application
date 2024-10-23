@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest --watchAll --collectCoverage",
-    "dev": "prisma migrate deploy && ts-node-dev -r tsconfig-paths/register --files src/app/server.ts"
+    "dev": "prisma generate && prisma migrate deploy && ts-node-dev -r tsconfig-paths/register --files src/app/server.ts"
   },
   "keywords": [],
   "author": "",
