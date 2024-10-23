@@ -54,67 +54,245 @@ API de Pesquisa de Satisfação do Cliente desenvolvida em TypeScript seguindo o
   ```
 ### 6. A aplicação estará disponível em http://localhost:3000 ou na porta espeficiada no env PORT
 
-## Endpoints
+Endpoints
+---------
 
-### Postman
-  A aplicação possui um arquivo .json para importar no Postman
+### 1\. Criar pesquisa
 
-### 1. Criar uma pesquisa de satisfação
-  - POST <b> /survey </b>
-  - Body(json):
-    ```json
-      {
-        "targetAudience": "Geeks",
-        "ratingStars": 5,
-        "contactEmail": "geek@example.com"
-      }
-    ```
+Este endpoint permite que você crie uma nova pesquisa com os campos obrigatórios: público-alvo, Quantidade de estrelas e e-mail de contato. 
 
-### 2. Atualizar uma pesquisa de satisfação
-  - PUT <b> /survey/:id </b>
-  - Body (json)
-    ```json
+#### Request
+  ```
+    POST /survey
+  ```
+
+##### Body
+
+  ```json   
+    {
+      "targetAudience": "Geeks",
+      "questions": ["Custom question 1", "Custom question 2"]
+    }
+  ```
+
+#### Resposta
+
+Com sucesso, a API responde junto com  as perguntas obrigatórias:
+
+  ```json
+    {
+      "id": 1,
+      "targetAudience": "Geeks",
+      "questions": [
+        { "id": 1, "content": "Público-alvo" },
+        { "id": 2, "content": "Quantidade de estrelas" },
+        { "id": 3, "content": "E-mail para contato" },
+        { "id": 4, "content": "Custom question 1" },
+        { "id": 5, "content": "Custom question 2" }
+      ]
+    }
+  ```
+
+### 2\. Atualizar pesquisa
+
+Este endpoint permite atualizar uma pesquisa por ID.
+
+#### Request
+  ```
+    PUT /survey/:id
+  ```
+
+##### Body
+
+  ```json
     {
       "targetAudience": "Minimalistas",
-      "ratingStars": 4,
-      "contactEmail": "minimal@example.com"
+      "questions": ["New Question 1", "New Question 2"]
     }
-    ```
+  ```
 
-### 3. Listar todas as pesquisas
-  - GET <b> /survey </b>
-  - Response:
-    - Status 200
-    - Exemplo:
-      ```json
-        [
+#### Resposta
+
+Retorna a pesquisa atualizada
+
+  ```json
+    {
+      "id": 1,
+      "targetAudience": "Minimalistas",
+      "createdAt": "2024-10-22T20:33:39.036Z",
+      "updatedAt": "2024-10-23T17:43:22.504Z",
+      "questions": [
+        { "id": 1, "content": "Público-alvo", "surveyId": 1  },
+        { "id": 2, "content": "Quantidade de estrelas", "surveyId": 1 },
+        { "id": 3, "content": "E-mail para contato", "surveyId": 1 },
+        { "id": 6, "content": "New Question 1", "surveyId": 1 },
+        { "id": 7, "content": "New Question 2", "surveyId": 1 }
+      ]
+    }
+  ``` 
+
+### 3\. Responder Pesquisa
+
+Este endpoint permite responde uma pesquisa por id
+
+#### Request
+  ```
+    POST /response/:id
+  ```
+##### Body
+
+  ```json
+    {
+      "ratingStars": 5,
+      "answers": [
+        { "questionId": 1, "answer": "Geeks" },
+        { "questionId": 2, "answer": "5 stars" }
+      ]
+    }
+  ```    
+
+#### Response
+
+Retorna o objeto da resposta
+
+  ```json
+    {
+      "id": 1,
+      "surveyId": 1,
+      "ratingStars": 5,
+      "survey": {
+        "id": 3,
+        "targetAudience": "Geeks",
+        "createdAt": "2024-10-22T20:36:12.694Z",
+        "updatedAt": "2024-10-22T20:36:12.694Z"
+      },
+      "createdAt": "2034-10-23T19:23:40.029Z",
+      "answers": [
+        { "id": 1, "questionId": 1, "responseId": 1, "answer": "Geeks" },
+        { "id": 2, "questionId": 2, "responseId": 1, "answer": "5 stars" }
+      ]
+    }
+  ```    
+
+### 4\. Listar Respostas de pesquisas por publico alvo
+
+Este endpoint lista as respostas da pesquisa filtradas por público-alvo, com filtro opcional de estrelas e formato da resposta( json ou csv).
+
+#### Request
+  ```
+    GET /response/list?targetAudience=Geeks&sortByStars=asc&format=csv
+  ```
+#### Response
+
+  ```json
+    [
+      {
+        "id": 1,
+        "surveyId": 3,
+        "ratingStars": 5,
+        "createdAt": "2024-10-22T20:47:52.578Z",       
+        "answers": [
           {
-            "id": 1,
-            "targetAudience": "Geeks",
-            "contactEmail": "geek@example.com",
-            "ratingStars": 5,
-            "createdAt": "2024-10-22T12:00:00Z",
-            "updatedAt": null
+            "question": { "content": "Público-alvo" },
+            "answer": "Geeks"
           }
         ]
-      ```
+      }
+    ]
+  ```    
 
-### 4. Buscar uma pesquisa pelo ID
-  - GET <b> /survey/:id </b>
-  - Response:
-    - Status 200
-    - Exemplo:
-      ```json
+### 5\. Listar pesquisas
+
+Este endpoint lista as pesquisas.
+
+#### Request
+  ```
+    GET /survey
+  ```
+#### Response
+
+  ```json
+    [
+     {
+        "id": 1,
+        "targetAudience": "Geeks",
+        "createdAt": "2024-10-22T20:34:15.479Z",
+        "updatedAt": "2024-10-22T20:34:15.479Z",
+        "questions": [
+            {
+                "id": 1,
+                "content": "Público-alvo",
+                "surveyId": 1
+            },
+            {
+                "id": 2,
+                "content": "Quantidade de estrelas",
+                "surveyId": 1
+            },
+            {
+                "id": 3,
+                "content": "E-mail para contato",
+                "surveyId": 1
+            }
+        ]
+    },
+    ]
+  ```     
+
+### 5\. Encontrar pesquisa
+
+Este endpoint encontra uma pesquisa por ID.
+
+#### Request
+  ```
+    GET /survey
+  ```
+#### Response
+
+  ```json
+    
+  {
+    "id": 1,
+    "targetAudience": "Geeks",
+    "createdAt": "2024-10-22T20:34:15.479Z",
+    "updatedAt": "2024-10-22T20:34:15.479Z",
+    "questions": [
         {
-          "id": 1,
-          "targetAudience": "Geeks",
-          "contactEmail": "geek@example.com",
-          "ratingStars": 5,
-          "createdAt": "2024-10-22T12:00:00Z",
-          "updatedAt": null
+            "id": 1,
+            "content": "Público-alvo",
+            "surveyId": 1,
+            "answers": []
+        },
+        {
+            "id": 2,
+            "content": "Quantidade de estrelas",
+            "surveyId": 1,
+            "answers": []
+        },
+        {
+            "id": 3,
+            "content": "E-mail para contato",
+            "surveyId": 1,
+            "answers": []
         }
-      ```
+    ]
+  }
+    
+  ```     
 
+
+### Respostas de Erro
+
+Se ocorrer algum erro, como uma pesquisa não encontrada ou requisição inválida, a API retornará uma resposta de erro apropriada com um código de status 4xx ou 5xx.
+
+#### Example
+  ```json
+    {
+      "status": "error",
+      "statusCode": 400,
+      "message": ""
+    }
+  ```
 
 ## Logs
   Os logs da aplicação são gerados usando a biblioteca Winston. Eles são armazenados em arquivos rotacionados a cada hora, com retenção de 14 dias, e exibidos no console em ambientes de desenvolvimento.
@@ -133,4 +311,3 @@ API de Pesquisa de Satisfação do Cliente desenvolvida em TypeScript seguindo o
   ```bash
     docker-compose up
   ```
-  Isso irá configurar tanto a API quanto o banco de dados.
