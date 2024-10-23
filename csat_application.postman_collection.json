@@ -1,29 +1,30 @@
 {
 	"info": {
-		"_postman_id": "fe782ad9-0743-4372-af03-efa8f3d49c6a",
-		"name": "csat_application",
+		"_postman_id": "9e9f1266-0983-496b-886a-34b1bb392faa",
+		"name": "Survey API",
+		"description": "Coleção de requests para a API de Pesquisa de Satisfação",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "21709628"
 	},
 	"item": [
 		{
-			"name": "Create Survey",
+			"name": "Criar pesquisa",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"targetAudience\": \"Geeks\",\r\n  \"ratingStars\": 5,\r\n  \"contactEmail\": \"geek@example.com\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\"targetAudience\": \"Geeks\",\"questions\": [\"Custom question 1\", \"Custom question 2\"]}"
 				},
 				"url": {
-					"raw": "{{local}}/survey",
+					"raw": "{{baseUrl}}/survey",
 					"host": [
-						"{{local}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"survey"
@@ -33,31 +34,23 @@
 			"response": []
 		},
 		{
-			"name": "GET Surveys",
+			"name": "Atualizar pesquisa",
 			"request": {
-				"method": "GET",
-				"header": [],
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"targetAudience\": \"Minimalistas\",\"questions\": [\"New Question 1\", \"New Question 2\"]}"
+				},
 				"url": {
-					"raw": "{{local}}/survey",
+					"raw": "{{baseUrl}}/survey/1",
 					"host": [
-						"{{local}}"
-					],
-					"path": [
-						"survey"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "FIND Survey",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{local}}/survey/1",
-					"host": [
-						"{{local}}"
+						"{{baseUrl}}"
 					],
 					"path": [
 						"survey",
@@ -68,23 +61,90 @@
 			"response": []
 		},
 		{
-			"name": "PUT Survey",
+			"name": "Responder Pesquisa",
 			"request": {
-				"method": "PUT",
-				"header": [],
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"targetAudience\": \"Minimalistas\",\r\n  \"ratingStars\": 4,\r\n  \"contactEmail\": \"minimal@example.com\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\"ratingStars\": 5, \"answers\": [{\"questionId\": 1, \"answer\": \"Geeks\"}, {\"questionId\": 2, \"answer\": \"5 stars\"}]}"
 				},
 				"url": {
-					"raw": "{{local}}/survey/1",
+					"raw": "{{baseUrl}}/response/1",
 					"host": [
-						"{{local}}"
+						"{{baseUrl}}"
+					],
+					"path": [
+						"response",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Respostas de pesquisas por publico alvo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/response/list?targetAudience=Geeks&sortByStars=asc&format=json",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"response",
+						"list"
+					],
+					"query": [
+						{
+							"key": "targetAudience",
+							"value": "Geeks"
+						},
+						{
+							"key": "sortByStars",
+							"value": "asc"
+						},
+						{
+							"key": "format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar pesquisas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/survey",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"survey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Encontrar pesquisa",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/survey/1",
+					"host": [
+						"{{baseUrl}}"
 					],
 					"path": [
 						"survey",
@@ -99,26 +159,27 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"type": "text/javascript"
 			}
 		},
 		{
 			"listen": "test",
 			"script": {
-				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"type": "text/javascript"
 			}
 		}
 	],
 	"variable": [
 		{
-			"key": "local",
-			"value": "http://localhost:3000"
+			"key": "baseUrl",
+			"value": "localhost:3000",
+			"type": "default"
 		}
 	]
 }
