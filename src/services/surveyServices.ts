@@ -71,21 +71,3 @@ export const listSurveys = async () => {
   logger.warn("Listing Surverys");
   return await listSurveysRepo()
 }
-
-export const exportSurveyResponsesAsCSV = async (targetAudience: string): Promise<string> => {
-  const responses = await findSurveyResponsesByTargetAudience(targetAudience, 'asc');
-  
-  const csvData = responses.map(response => {
-    const answers = response.answers.reduce((acc: any, answer: any) => {
-      acc[answer.question.content] = answer.answer;
-      return acc;
-    }, {});
-    
-    return answers
-  });
-
-  // const csvFields = ['surveyId', 'response', 'stars',  'createdAt', 'targetAudience', 'contactEmail', 'ratingStars'];
-  const json2csvParser = new Parser();
-
-  return json2csvParser.parse(csvData);
-};

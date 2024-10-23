@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { fillSurvey, listSurveyResponsesByAudience } from '@/services/surveyResponseServices';
 import logger from '../utils/logger';
+import { generateCsvFromSurveyResponses } from '@/utils/csvResponse';
 
 export const fillSurveyController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { id } = req.params;
@@ -23,13 +24,22 @@ export const fillSurveyController = async (req: Request, res: Response, next: Ne
   }
 };
 
-export const listSurveyResponsesController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const listSurveyResponsesController = async (req: Request, res: Response, next: NextFunction) => {
   const { targetAudience } = req.query;
   const sortByStars = req.query.sortByStars === 'desc' ? 'desc' : 'asc';
-
+  const format = req.query.format || 'json';
+  console.log(targetAudience, sortByStars, format )
   try {
     const responses = await listSurveyResponsesByAudience(targetAudience as string, sortByStars);
-    res.status(200).json(responses);
+    
+    if (format === 'csv') {
+      const csv = generateCsvFromSurveyResponses(responses);
+      res.header('Content-Type', 'text/csv');
+      res.attachment('survey-responses.csv');
+      return res.send(csv);
+    } else {
+      return res.json(responses);
+    }
   } catch (err) {
     logger.error(`Error listing survey responses: ${err}`);
     next(err)

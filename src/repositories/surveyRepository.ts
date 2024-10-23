@@ -1,5 +1,5 @@
 import prisma from '@/services/prismaClient';
-import { Survey } from '@prisma/client';
+import { Prisma, Survey } from '@prisma/client';
 import logger from '@/utils/logger';
 
 
@@ -51,8 +51,11 @@ export const updateSurvey = async (id: number, data: Partial<Survey>, questions:
   });
 };
 
+type SurveyWithQuestionsAnswers = Prisma.SurveyGetPayload<{
+  include: { questions: { include: { answers: true } } }
+}>
 
-export const findSurveyById = async (id: number): Promise<Survey | null> => {
+export const findSurveyById = async (id: number): Promise<SurveyWithQuestionsAnswers | null> => {
   logger.info(`Find survey in the database: id=${id}`);
   return await prisma.survey.findUnique({
     where: { id },

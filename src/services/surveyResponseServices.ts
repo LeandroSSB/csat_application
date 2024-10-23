@@ -15,6 +15,14 @@ export const fillSurvey = async ( { answers, ratingStars, surveyId } :ISurveyRes
     throw new ErrorHandler(404, 'Survey not found');
   }
 
+  const answeredEveryQuestion = survey.questions.every(question => answers.find( answer => answer.questionId == question.id ))
+  if ( ! answeredEveryQuestion ) {
+    const questionsLeft = survey.questions.filter(question => !answers.find(answer => answer.questionId == question.id) ).map(question => question.content)
+
+    logger.warn(`Survey not completely responded: id=${surveyId}`);
+    throw new ErrorHandler(404, `Survey not completely responded. Questions left: ${questionsLeft.join(", ")}`);
+  }
+
   try {
     const surveyResponse = await saveSurveyResponse( surveyId, ratingStars, answers );
     logger.info(`Survey response saved: ${JSON.stringify(surveyResponse)}`);
