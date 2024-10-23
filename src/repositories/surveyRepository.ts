@@ -54,7 +54,7 @@ export const updateSurvey = async (id: number, data: Partial<Survey>, questions:
 
 
 
-export const findSurveyById = async (id: number): Promise<SurveyWithQuestionsAnswers | null> => {
+export const findSurveyById = async (id: number) => {
   logger.info(`Find survey in the database: id=${id}`);
   return await prisma.survey.findUnique({
     where: { id },

@@ -151,4 +151,51 @@ describe('SurveyResponse Controller - List response options ', () => {
     expect(response.headers['content-type']).toBe('text/csv; charset=utf-8');
   })
   
+  it('should list survey responses and order them by ratingStars in ascending order', async () => {
+    prismaMock.surveyResponse.findMany.mockResolvedValue([
+      {
+        id: 1,
+        ratingStars: 3,
+        surveyId: 1,
+        answers: [{ questionId: 1, answer: 'Bom' }],
+      },
+      {
+        id: 2,
+        ratingStars: 5,
+        surveyId: 1,
+        answers: [{ questionId: 1, answer: 'Excelente' }],
+      },
+    ]as SurveyResponseAnswers[] );
+  
+    const response = await request(app).get('/response/list?sort=asc');
+  
+    expect(response.status).toBe(200);
+    expect(response.body[0].ratingStars).toBe(3);
+    expect(response.body[1].ratingStars).toBe(5);
+  });
+  
+  it('should list survey responses and order them by ratingStars in descending order', async () => {
+    prismaMock.surveyResponse.findMany.mockResolvedValue([
+      {
+        id: 1,
+        ratingStars: 5,
+        surveyId: 1,
+        answers: [{ questionId: 1, answer: 'Excelente' }],
+      },
+      {
+        id: 2,
+        ratingStars: 3,
+        surveyId: 1,
+        answers: [{ questionId: 1, answer: 'Bom' }],
+      },
+    ] as SurveyResponseAnswers[]);
+  
+    const response = await request(app).get('/response/list?sort=desc');
+  
+    expect(response.status).toBe(200);
+    expect(response.body[0].ratingStars).toBe(5);
+    expect(response.body[1].ratingStars).toBe(3);
+  });
+
+
 })
