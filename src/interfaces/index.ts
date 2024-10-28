@@ -52,3 +52,10 @@ export type SurveyResponseAnswers= Prisma.SurveyResponseGetPayload<{
   }
 }>
 
+
+export type SurveyResponseSurveyAnswer = Prisma.SurveyResponseGetPayload<{
+  include: {
+    answers: true,
+    survey: true
+  }
+}>
