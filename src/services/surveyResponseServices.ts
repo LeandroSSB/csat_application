@@ -62,7 +62,7 @@ export const fillSurvey = async ( { answers, ratingStars, surveyId } :ISurveyRes
       text: "Thank you for answering the survey", // plain text body
       // html: "<b>Hello world?</b>", // html body
     })
-    logger.warn(`Survey email sent ${survey.id} to ${emailAnswer.answer}; ${info}`);
+    logger.warn(`Survey email sent ${survey.id} to ${emailAnswer.answer}; ${JSON.stringify(info)}`);
 
 
     return surveyResponse;
